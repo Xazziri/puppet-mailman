@@ -95,7 +95,7 @@ class mailman (
   $smtp_hostname         = $mailman::params::smtp_hostname,
   $http_hostname         = $::hostname,
   $virtual_host_overview = false,
-  $smtp_max_rcpts        = 500,
+  $smtp_max_rcpts        = '500',
   $list_data_dir         = $mailman::params::list_data_dir,
   $log_dir               = $mailman::params::log_dir,
   $lock_dir              = $mailman::params::lock_dir,
@@ -110,13 +110,13 @@ class mailman (
   $langs = ['ar','ca','cs','da','de','en','es','et','eu','fi','fr','gl','he',
     'hr','hu','ia','it','ja','ko','lt','nl','no','pl','pt','pt_BR','ro',
     'ru','sk','sl','sr','sv','tr','uk','vi','zh_CN','zh_TW']
-  validate_bool($enable_service)
-  validate_re($language, $langs)
-  validate_re($mta, ['Manual', 'Postfix'])
-  validate_re($smtp_hostname, '^[-a-zA-Z0-9]+\.[-a-zA-Z0-9\.]+$')
-  validate_re($http_hostname, '^[-a-zA-Z0-9\.]+$')
-  validate_bool($virtual_host_overview)
-  validate_re($smtp_max_rcpts, '[0-9]*')
+validate_legacy(Boolean, validate_bool, $enable_service)
+validate_legacy(String,validate_re, $language, $langs)
+validate_legacy(Enum['Manual','Postfix'],validate_re,$mta)
+validate_legacy(String,validate_re, $smtp_hostname, '^[-a-zA-Z0-9]+\.[-a-zA-Z0-9\.]+$')
+validate_legacy(String, validate_re , $http_hostname, '^[-a-zA-Z0-9\.]+$')
+validate_legacy(Boolean,validate_bool,$virtual_host_overview)
+validate_legacy(String, validate_re, $smtp_max_rcpts, '[0-9]*')
 
   # Don't expose var_prefix as a parameter because no functionality depends on
   # it directly. It's only used to derive other parameters, like data_dir.

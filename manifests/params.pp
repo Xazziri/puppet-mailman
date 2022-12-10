@@ -49,11 +49,8 @@ class mailman::params {
       $wrapper_dir   = "${exec_prefix}/mail"
       $bin_dir       = "${prefix}/bin"
       $scripts_dir   = "${prefix}/scripts"
-      if ($::operatingsystem=='Fedora') and ($::operatingsystemmajrelease==19){
-        $template_dir  = '/etc/mailman/templates'
-      } else {
-        $template_dir  = "${prefix}/templates"
-      }
+      $template_dir  = '/etc/mailman/templates'
+      $template_dir  = "${prefix}/templates"
       $messages_dir  = "${prefix}/messages"
       # archive_dir is not a real Mailman param, it's just useful in this module
       $archive_dir   = "${var_prefix}/archives"
