@@ -4,7 +4,6 @@
 #
 # @example
 #   include mailman::etclinks
-# == Class: mailman::etclinks
 #
 # A standard Mailman installation has only two parts.
 # - Static bits  (represented by PREFIX variable)
@@ -19,9 +18,6 @@
 # module ignores the use of /etc/ on Red Hat and puts the files back into
 # standard directories. But as a compromise, we can create some symlinks.
 #
-# === Examples
-#
-#  include mailman::etclinks
 #
 # === Authors
 #
@@ -30,14 +26,27 @@
 # === Copyright
 #
 # Copyright 2013 Nic Waller, unless otherwise noted.
-#
-class mailman::etclinks (
-  $mm_username  = $mailman::params::mm_username,
-  $mm_groupname = $mailman::params::mm_groupname,
-  $mm_package   = $mailman::params::mm_package,
-  $etc_dir = '/etc/mailman',
-  ) {
 
+# ===Parameters
+#
+# [*mm_username*]
+#  user account for mailman application
+#
+# [*mm_groupname*]
+# Group for mailman application
+#
+# [*mm_package*]
+# Packagename for mailman application
+#
+# [*etc_dir*]
+# Os specific configuration dir
+
+class mailman::etclinks (
+  String $mm_username  = $mailman::mm_username,
+  String $mm_groupname = $mailman::mm_groupname,
+  String $mm_package   = $mailman::mm_package,
+  Stdlib::Absolutepath $etc_dir = '/etc/mailman',
+) {
   file { $etc_dir:
     ensure  => directory,
     owner   => 'root',

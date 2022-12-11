@@ -99,7 +99,39 @@
 #    FIXME
 #  [*pid_file*]
 #    FIXME
-
+#  [*prefix*]
+#    FIXME
+#  [*mm_username*]
+#    FIXME
+#  [*mm_groupname*]
+#    FIXME
+#  [*mm_package*]
+#    FIXME
+#  [*etc_dir*]
+#    FIXME
+#  [*mm_service*]
+#    FIXME
+#  [*site_pw_file*]
+#    FIXME
+#  [*creator_pw_file*]
+#    FIXME
+#  [*aliasfile*]
+#    FIXME
+#  [*aliasfiledb*]
+#    FIXME
+#  [*private_archive_file_dir*]
+#    FIXME
+#  [*public_archive_file_dir*]
+#    FIXME
+#  [*mailman_site_list*]
+#    FIXME
+#  [*default_email_host*]
+#    FIXME
+#  [*admin_email*]
+#    FIXME
+#  [*site_pw_hash*]
+#    FIXME
+#
 # === Examples
 #
 #  include mailman
@@ -113,25 +145,40 @@
 # Copyright 2013 Nic Waller, unless otherwise noted.
 #
 class mailman (
-  Boolean $enable_service             = false,
-  Stdlib::Absolutepath $prefix        = $mailman::params::prefix,
-  String $site_pw                     = 'CHANGEME',
-  String $language                    = 'en',
-  Enum['Postfix','Manual'] $mta       = 'Manual',
-  String $smtp_hostname               = $mailman::params::smtp_hostname,
-  String $http_hostname               = $facts['networking']['hostname'],
-  Boolean $virtual_host_overview      = false,
-  String $smtp_max_rcpts              = '500',
-  Stdlib::Absolutepath $list_data_dir = $mailman::params::list_data_dir,
-  Stdlib::Absolutepath $log_dir       = $mailman::params::log_dir,
-  Stdlib::Absolutepath $lock_dir      = $mailman::params::lock_dir,
-  Stdlib::Absolutepath $data_dir      = $mailman::params::data_dir,
-  Stdlib::Absolutepath $pid_dir       = $mailman::params::pid_dir,
-  Stdlib::Absolutepath $spam_dir      = $mailman::params::spam_dir,
-  Stdlib::Absolutepath $queue_dir     = $mailman::params::queue_dir,
-  Stdlib::Absolutepath $archive_dir   = $mailman::params::archive_dir,
-  Stdlib::Absolutepath $pid_file      = $mailman::params::pid_file,
-  Hash $option_hash                   = { 'DEFAULT_MAX_NUM_RECIPIENTS' => 20 },
+  Boolean $enable_service                        = false,
+  Stdlib::Absolutepath $prefix                   = $mailman::params::prefix,
+  String $site_pw                                = 'CHANGEME',
+  String $language                               = 'en',
+  Enum['Postfix','Manual'] $mta                  = 'Manual',
+  String $smtp_hostname                          = $mailman::params::smtp_hostname,
+  String $http_hostname                          = $facts['networking']['hostname'],
+  Boolean $virtual_host_overview                 = false,
+  String $smtp_max_rcpts                         = '500',
+  Stdlib::Absolutepath $etc_dir                  = '/etc/mailman',
+  Stdlib::Absolutepath $list_data_dir            = $mailman::params::list_data_dir,
+  Stdlib::Absolutepath $log_dir                  = $mailman::params::log_dir,
+  Stdlib::Absolutepath $lock_dir                 = $mailman::params::lock_dir,
+  Stdlib::Absolutepath $data_dir                 = $mailman::params::data_dir,
+  Stdlib::Absolutepath $pid_dir                  = $mailman::params::pid_dir,
+  Stdlib::Absolutepath $spam_dir                 = $mailman::params::spam_dir,
+  Stdlib::Absolutepath $queue_dir                = $mailman::params::queue_dir,
+  Stdlib::Absolutepath $archive_dir              = $mailman::params::archive_dir,
+  Stdlib::Absolutepath $pid_file                 = $mailman::params::pid_file,
+  String $mm_username                            = $mailman::params::mm_username,
+  String $mm_groupname                           = $mailman::params::mm_groupname,
+  String $mm_package                             = $mailman::params::mm_package,
+  String $mm_service                             = $mailman::params::mm_service,
+  Stdlib::Absolutepath $site_pw_file             = "${data_dir}/adm.pw",
+  Stdlib::Absolutepath $creator_pw_file          = "${data_dir}/creator.pw",
+  Stdlib::Absolutepath $aliasfile                = "${data_dir}/aliases",
+  Stdlib::Absolutepath $aliasfiledb              = "${data_dir}/aliases.db",
+  Stdlib::Absolutepath $private_archive_file_dir = "${archive_dir}/private",
+  Stdlib::Absolutepath $public_archive_file_dir  = "${archive_dir}/public",
+  String $mailman_site_list                      = 'mailman', # Allows chars are [-+_.=a-z0-9]
+  Stdlib::Fqdn $default_email_host               = $smtp_hostname,
+  Stdlib::Email $admin_email                     = "${mailman_site_list}@${default_email_host}",
+  String $site_pw_hash                           = sha1($site_pw),
+  Hash $option_hash                              = { 'DEFAULT_MAX_NUM_RECIPIENTS' => 20 },
 ) inherits mailman::params {
   $langs = ['ar','ca','cs','da','de','en','es','et','eu','fi','fr','gl','he',
     'hr','hu','ia','it','ja','ko','lt','nl','no','pl','pt','pt_BR','ro',
@@ -151,22 +198,6 @@ class mailman (
   if ($facts['os']['family'] == 'RedHat') and ($list_data_dir != "${var_prefix}/lists") {
     fail('rmlist requires that var_prefix is parent of list_data_dir on RHEL')
   }
-
-  $mm_username              = $mailman::params::mm_username
-  $mm_groupname             = $mailman::params::mm_groupname
-  $mm_service               = $mailman::params::mm_service
-  $mm_package               = $mailman::params::mm_package
-
-  $site_pw_file             = "${data_dir}/adm.pw"
-  $creator_pw_file          = "${data_dir}/creator.pw"
-  $aliasfile                = "${data_dir}/aliases"
-  $aliasfiledb              = "${data_dir}/aliases.db"
-  $private_archive_file_dir = "${archive_dir}/private"
-  $public_archive_file_dir  = "${archive_dir}/public"
-  $mailman_site_list        = 'mailman' # Allows chars are [-+_.=a-z0-9]
-  $default_email_host       = $smtp_hostname
-  $admin_email              = "${mailman_site_list}@${default_email_host}"
-  $site_pw_hash             = sha1($site_pw)
 
   package { $mm_package:
     ensure  => installed,

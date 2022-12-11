@@ -35,7 +35,7 @@ class mailman::config inherits mailman::params {
   $var_prefix               = $mailman::var_prefix
   $data_dir                 = $mailman::data_dir
   $list_data_dir            = $mailman::list_data_dir
-  $config_dir               = $mailman::data_dir # Unique to RHEL
+  $config_dir               = $mailman::data_dir  # Unique to RHEL
   $site_pw_file             = $mailman::site_pw_file
   $creator_pw_file          = $mailman::creator_pw_file
   $private_archive_file_dir = $mailman::private_archive_file_dir
