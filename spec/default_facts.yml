@@ -1,0 +1,15 @@
+# Use default_module_facts.yml for module specific facts.
+#
+# Facts specified here will override the values provided by rspec-puppet-facts.
+---
+is_pe: false
+networking:
+  fqdn: "mailman.test.lan"
+  hostname: "mailman.test.lan"
+  interfaces:
+    eth0:
+      bindings:
+        - address: 192.168.121.101
+          netmask: 255.255.255.0
+          network: 192.168.121.0
+mailmanversion: '2.1.29'
