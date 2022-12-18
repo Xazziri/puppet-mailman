@@ -40,7 +40,7 @@
 #
 # [*etc_dir*]
 # Os specific configuration dir
-
+#
 class mailman::etclinks (
   String $mm_username  = $mailman::mm_username,
   String $mm_groupname = $mailman::mm_groupname,
