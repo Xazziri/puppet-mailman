@@ -157,6 +157,7 @@ validate_legacy(String, validate_re, $smtp_max_rcpts, '[0-9]*')
       path        => $mailman::params::bin_dir,
       refreshonly => true,
       subscribe   => File['mm_cfg'],
+      require => Package[$mm_package],
     }
   } else {
     warning('Be careful using genaliases on Mailman < 2.1.15')
