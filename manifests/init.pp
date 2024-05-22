@@ -97,7 +97,7 @@ class mailman (
   $mta                   = 'Manual',
   $smtp_hostname         = $mailman::params::smtp_hostname,
   $http_hostname         = $::hostname,
-  $default_url_pattern   = 'https://%s/mailman/'
+  $default_url_pattern   = 'https://%s/mailman/',
   $virtual_host_overview = false,
   $smtp_max_rcpts        = '500',
   $list_data_dir         = $mailman::params::list_data_dir,
