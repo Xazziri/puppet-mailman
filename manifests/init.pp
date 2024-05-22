@@ -51,6 +51,9 @@
 #   This commonly matches smtp_hostname but that isn't a requirement.
 #   A single-label DNS name is permitted here (eg. "localhost").
 #
+# [*default_url_pattern*]
+# Set the default url think twice to set this to http
+#
 # [*virtual_host_overview*]
 #   This is normally set to true, which means that mailing lists will only show
 #   up on the frontend if the HTTP hostname matches the list. This tends to
@@ -94,6 +97,7 @@ class mailman (
   $mta                   = 'Manual',
   $smtp_hostname         = $mailman::params::smtp_hostname,
   $http_hostname         = $::hostname,
+  $default_url_pattern   = 'https://%s/mailman/'
   $virtual_host_overview = false,
   $smtp_max_rcpts        = '500',
   $list_data_dir         = $mailman::params::list_data_dir,
